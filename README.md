@@ -156,6 +156,8 @@ Add this to `~/.bashrc`, `~/.zshrc`, or `~/.config/plasma-workspace/env/gpt-runn
 export QT_PLUGIN_PATH="$HOME/.local/lib64/qt6/plugins:$HOME/.local/lib/qt6/plugins:$QT_PLUGIN_PATH"
 ```
 
+**Note**: If this line already exists in your configuration, don't add it again to avoid path duplication.
+
 **Important**: You must restart your Plasma session (log out and back in) for the QT_PLUGIN_PATH changes to take effect.
 
 ### 5. Restart KRunner
@@ -170,8 +172,10 @@ Or log out and back in to restart your Plasma session.
 ### 🗑️ Uninstall (Immutable Distros)
 
 ```bash
-rm -rf ~/.local/lib/qt6/plugins/kf6/krunner/krunner_chatgpt.*
-rm -rf ~/.local/lib64/qt6/plugins/kf6/krunner/krunner_chatgpt.*
+rm -f ~/.local/lib/qt6/plugins/kf6/krunner/krunner_chatgpt.so
+rm -f ~/.local/lib/qt6/plugins/kf6/krunner/chatgptrunner.json
+rm -f ~/.local/lib64/qt6/plugins/kf6/krunner/krunner_chatgpt.so
+rm -f ~/.local/lib64/qt6/plugins/kf6/krunner/chatgptrunner.json
 kquitapp6 krunner && kstart6 krunner
 ```
 
