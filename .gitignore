@@ -1,0 +1,34 @@
+# Build directories
+build/
+build-*/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Qt
+*.moc
+moc_*.cpp
+*.qrc.cpp
+
+# C++
+*.o
+*.so
+*.a
+*.lo
+*.la
+*.out
+
+# IDE
+.vscode/
+.idea/
+*.pro.user
+*.kate-swp
+
+# System
+.DS_Store
+*~
+*.bak

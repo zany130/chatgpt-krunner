@@ -1,0 +1,16 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "ChatGPT KRunner Plugin"
+            }
+        ],
+        "Description": "Query ChatGPT or any OpenAI-compatible LLM from KRunner",
+        "Icon": "chatgpt",
+        "Name": "ChatGPT Runner",
+        "Version": "1.0",
+        "Website": "https://github.com/zany130/chatgpt-krunner"
+    },
+    "X-Plasma-API": "KRunner/AbstractRunner",
+    "X-Plasma-AdvertiseSingleRunnerQueryMode": true
+}
