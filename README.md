@@ -91,6 +91,90 @@ kstart6 krunner
 
 Or log out and back in to restart your Plasma session.
 
+## 🔨 Build Instructions (Immutable Distros: Bazzite, Silverblue, Kinoite)
+
+Immutable distributions require user-local installation since system directories are read-only. This method installs the plugin to `~/.local` without requiring `sudo` or package layering.
+
+### 1. Install Dependencies
+
+**Option A: Skip if already available** (common on Bazzite)
+- Most dependencies are already present on Bazzite and similar immutable KDE distros
+- Try building first; if it fails, proceed to Option B
+
+**Option B: Use toolbox/distrobox for building**
+```bash
+# Create a Fedora toolbox (if not already created)
+toolbox create fedora-dev
+
+# Enter the toolbox
+toolbox enter fedora-dev
+
+# Install build dependencies inside toolbox
+sudo dnf install \
+    cmake \
+    extra-cmake-modules \
+    kf6-krunner-devel \
+    kf6-ki18n-devel \
+    kf6-kcoreaddons-devel \
+    kf6-kconfig-devel \
+    qt6-qtbase-devel \
+    qt6-qtnetwork-devel \
+    gcc-c++
+```
+
+### 2. Build
+
+```bash
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=~/.local -DCMAKE_BUILD_TYPE=Release
+make
+```
+
+### 3. Install (No sudo required!)
+
+```bash
+make install
+```
+
+The plugin will be installed to one of these user-local paths:
+```
+~/.local/lib64/qt6/plugins/kf6/krunner/krunner_chatgpt.so
+~/.local/lib64/qt6/plugins/kf6/krunner/chatgptrunner.json
+```
+or
+```
+~/.local/lib/qt6/plugins/kf6/krunner/krunner_chatgpt.so
+~/.local/lib/qt6/plugins/kf6/krunner/chatgptrunner.json
+```
+
+### 4. Configure QT_PLUGIN_PATH
+
+Add this to `~/.bashrc`, `~/.zshrc`, or `~/.config/plasma-workspace/env/gpt-runner.sh`:
+
+```bash
+export QT_PLUGIN_PATH="$HOME/.local/lib64/qt6/plugins:$HOME/.local/lib/qt6/plugins:$QT_PLUGIN_PATH"
+```
+
+**Important**: You must restart your Plasma session (log out and back in) for the QT_PLUGIN_PATH changes to take effect.
+
+### 5. Restart KRunner
+
+```bash
+kquitapp6 krunner
+kstart6 krunner
+```
+
+Or log out and back in to restart your Plasma session.
+
+### 🗑️ Uninstall (Immutable Distros)
+
+```bash
+rm -rf ~/.local/lib/qt6/plugins/kf6/krunner/krunner_chatgpt.*
+rm -rf ~/.local/lib64/qt6/plugins/kf6/krunner/krunner_chatgpt.*
+kquitapp6 krunner && kstart6 krunner
+```
+
 ## 🚀 Usage
 
 1. Press **Alt+Space** (or Meta) to open KRunner
@@ -118,14 +202,25 @@ gpt write a haiku about coffee
 ### No results appear
 
 ```bash
-# Check if plugin is installed
+# Check if plugin is installed (system installation)
 ls /usr/lib64/qt6/plugins/kf6/krunner/krunner_chatgpt.so
+
+# Check if plugin is installed (user-local installation)
+ls ~/.local/lib64/qt6/plugins/kf6/krunner/krunner_chatgpt.so
+ls ~/.local/lib/qt6/plugins/kf6/krunner/krunner_chatgpt.so
+
+# Verify QT_PLUGIN_PATH includes user paths (for immutable distros)
+echo $QT_PLUGIN_PATH
 
 # Check KRunner logs
 journalctl --user -f | grep -i krunner
 
-# Reinstall
+# Reinstall (system)
 sudo make install
+kquitapp6 krunner && kstart6 krunner
+
+# Or reinstall (user-local)
+make install
 kquitapp6 krunner && kstart6 krunner
 ```
 
